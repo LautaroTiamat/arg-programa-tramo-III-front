@@ -2,13 +2,17 @@ import { useState, useEffect } from 'react';
 import { Card } from 'react-bootstrap';
 //import axios from 'axios';
 
+import { useAuthContext } from '../context/AuthContext.jsx';
+
 import TablaDeDatos from './../components/TablaDeDatos.jsx';
 
 const Inicio = () => {
   const [lista, setLista] = useState([]);
 
+  const { usuario } = useAuthContext();
+
   const cargarLista = async () => {
-    const url = 'http://localhost:3000/usuarios';
+    const url = 'http://localhost:3000/publicaciones';
 
     //const respuesta = await axios.get(url);
     let respuesta = await fetch(url);
@@ -26,6 +30,7 @@ const Inicio = () => {
 
   return (
     <Card.Body>
+      { usuario ? ('Bienvenid@ ' + usuario.nombres) : 'No se inició sesión' }
       <TablaDeDatos lista={lista} />
     </Card.Body>
   )

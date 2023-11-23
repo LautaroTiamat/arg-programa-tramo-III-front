@@ -1,8 +1,8 @@
 import axios from 'axios';
 
-const url = 'http://localhost:3000/usuario';
+const url = 'http://localhost:3000/publicacion';
 
-const traerDatosDeUsuarioPorID = async (id) => {
+const traerDatosDePosteoPorID = async (id) => {
     const endpoint = url + '/' + id;
 
     try {
@@ -19,5 +19,5 @@ const traerDatosDeUsuarioPorID = async (id) => {
 }
 
 export {
-    traerDatosDeUsuarioPorID,
+    traerDatosDePosteoPorID,
 }

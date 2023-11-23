@@ -22,7 +22,7 @@ const Eliminar = () => {
         setDeshabilitarBoton(true);
         
         try {
-            const url = 'http://localhost:3000/usuario';
+            const url = 'http://localhost:3000/publicacion';
             const respuesta = await axios.delete(url, { data: { id: id } });
 
             if (respuesta.status === 200) {
@@ -40,7 +40,7 @@ const Eliminar = () => {
     return (
         <Card.Body>
             <Alert variant="warning">
-                ¿Está seguro que desea eliminar el usuario con ID {id}?
+                ¿Está seguro que desea eliminar la publicación con ID {id}?
             </Alert>
 
             {

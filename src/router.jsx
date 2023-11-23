@@ -2,19 +2,23 @@ import { createBrowserRouter } from "react-router-dom";
 
 // Vistas
 import Inicio from './views/Inicio.jsx';
-import Cargar from './views/Cargar.jsx';
+import RegistrarUsuario from './views/RegistrarUsuario.jsx';
 import Eliminar from './views/Eliminar.jsx';
 import Editar from './views/Editar.jsx';
 import Ver from './views/Ver.jsx';
 import Login from './views/Login.jsx';
+import CrearPosteo from './views/CrearPosteo.jsx';
 
 const rutas = createBrowserRouter([
     {
         path: "/",
         element: <Inicio />,
     }, {
-        path: "/cargar",
-        element: <Cargar />,
+        path: "/register",
+        element: <RegistrarUsuario />,
+    }, {
+        path: "/crear",
+        element: <CrearPosteo />,
     }, {
         path: "/eliminar/:id",
         element: <Eliminar />,

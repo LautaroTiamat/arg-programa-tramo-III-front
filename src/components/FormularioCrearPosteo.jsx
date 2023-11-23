@@ -8,55 +8,60 @@ import Alert from 'react-bootstrap/Alert';
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 
-const FormularioIngresar = () => {
-    const [nombres, setNombres] = useState('');
-    const [apellidos, setApellidos] = useState('');
+import { useAuthContext } from '../context/AuthContext';
+
+const FormularioCrearPosteo = () => {
+    const [titulo, setTitulo] = useState('');
+    const [descripcion, setDescripcion] = useState('');
+
     const [deshabilitarBoton, setDeshabilitarBoton] = useState(false);
     const [errores, setErrores] = useState({});
 
     const navigate = useNavigate();
+    const { token } = useAuthContext();
 
-    const cambiarNombres = (e) => {
-        setNombres(e.target.value);
+    const cambiarTitulo = (e) => {
+        setTitulo(e.target.value);
     }
 
-    const cambiarApellidos = (e) => {
-        setApellidos(e.target.value);
+    const cambiarDescripcion = (e) => {
+        setDescripcion(e.target.value);
     }
 
     const verificarDatos = async () => {
         let misErrores = {}
 
-        if (nombres.length === 0) {
-            misErrores.nombres = 'Debe introducir al menos un nombre.';
+        if (titulo.length === 0) {
+            misErrores.titulo = 'Debe introducir un título.';
         }
-        
-        if (apellidos.length === 0) {
-            misErrores.apellidos = 'Debe introducir al menos un apellido.';
+
+        if (descripcion.length === 0) {
+            misErrores.descripcion = 'Debe introducir una descipción.';
         }
 
         setErrores(misErrores);
 
         if (Object.entries(misErrores).length === 0) {
             setDeshabilitarBoton(true);
-        
-            console.log(nombres);
-            console.log(apellidos);
 
             await mandarDatos();
         }
     }
 
     const mandarDatos = async () => {
-        const url = 'http://localhost:3000/usuario';
+        const url = 'http://localhost:3000/publicacion';
 
         const datos = {
-            nombres: nombres,
-            apellidos: apellidos,
+            titulo: titulo,
+            descripcion: descripcion,
+        }
+
+        const headers = {
+            token: token
         }
 
         try {
-            const respuesta = await axios.post(url, datos);
+            const respuesta = await axios.post(url, datos, { headers: headers });
 
             if (respuesta.status === 200) {
                 return navigate('/');
@@ -72,32 +77,32 @@ const FormularioIngresar = () => {
 
     return (
         <Form>
-            <Form.Group as={Row} className="mb-3" controlId="formPlaintextEmail">
+            <Form.Group as={Row} className="mb-3">
                 <Form.Label column sm="2">
-                    Nombres
+                    Título
                 </Form.Label>
                 <Col sm="10">
-                    <Form.Control type="text" onInput={cambiarNombres} />
+                    <Form.Control type="text" onInput={cambiarTitulo} />
                     {
-                        errores.nombres && (
+                        errores.titulo && (
                             <span style={{ color: 'red' }}>
-                                {errores.nombres}
+                                {errores.titulo}
                             </span>
                         )
                     }
                 </Col>
             </Form.Group>
 
-            <Form.Group as={Row} className="mb-3" controlId="formPlaintextPassword">
+            <Form.Group as={Row} className="mb-3">
                 <Form.Label column sm="2">
-                    Apellidos
+                    Descripción
                 </Form.Label>
                 <Col sm="10">
-                    <Form.Control type="text" onInput={cambiarApellidos} />
+                    <Form.Control type="text" onInput={cambiarDescripcion} />
                     {
-                        errores.apellidos && (
+                        errores.descripcion && (
                             <span style={{ color: 'red' }}>
-                                {errores.apellidos}
+                                {errores.descripcion}
                             </span>
                         )
                     }
@@ -113,10 +118,10 @@ const FormularioIngresar = () => {
             }
 
             <Button variant="primary" onClick={verificarDatos} disabled={deshabilitarBoton}>
-                Cargar Datos
+                Crear publicación
             </Button>
         </Form>
     );
 }
 
-export default FormularioIngresar;
+export default FormularioCrearPosteo;

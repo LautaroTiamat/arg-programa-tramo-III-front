@@ -8,45 +8,42 @@ import Alert from 'react-bootstrap/Alert';
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 
-import { traerDatosDeUsuarioPorID } from './../utils/llamados.js';
+import { traerDatosDePosteoPorID } from './../utils/llamados.js';
 
 const FormularioEditar = (props) => {
     const { id } = props;
-    const url = 'http://localhost:3000/usuario';
+    const url = 'http://localhost:3000/publicacion';
 
-    const [nombres, setNombres] = useState('');
-    const [apellidos, setApellidos] = useState('');
+    const [titulo, setTitulo] = useState('');
+    const [descripcion, setDescripcion] = useState('');
     const [deshabilitarBoton, setDeshabilitarBoton] = useState(false);
     const [errores, setErrores] = useState({});
 
     const navigate = useNavigate();
 
-    const cambiarNombres = (e) => {
-        setNombres(e.target.value);
+    const cambiarTitulo = (e) => {
+        setTitulo(e.target.value);
     }
 
-    const cambiarApellidos = (e) => {
-        setApellidos(e.target.value);
+    const cambiarDescripcion = (e) => {
+        setDescripcion(e.target.value);
     }
 
     const verificarDatos = async () => {
         let misErrores = {}
 
-        if (nombres.length === 0) {
-            misErrores.nombres = 'Debe introducir al menos un nombre.';
+        if (titulo.length === 0) {
+            misErrores.titulo = 'Debe introducir al menos un titulo.';
         }
         
-        if (apellidos.length === 0) {
-            misErrores.apellidos = 'Debe introducir al menos un apellido.';
+        if (descripcion.length === 0) {
+            misErrores.descripcion = 'Debe introducir al menos una descripcion.';
         }
 
         setErrores(misErrores);
 
         if (Object.entries(misErrores).length === 0) {
             setDeshabilitarBoton(true);
-        
-            console.log(nombres);
-            console.log(apellidos);
 
             await mandarDatos();
         }
@@ -55,8 +52,8 @@ const FormularioEditar = (props) => {
     const mandarDatos = async () => {
         const datos = {
             id: id,
-            nombres: nombres,
-            apellidos: apellidos,
+            titulo: titulo,
+            descripcion: descripcion,
         }
 
         try {
@@ -75,13 +72,13 @@ const FormularioEditar = (props) => {
     }
 
     const traerDatos = async () => {
-        const respuesta = await traerDatosDeUsuarioPorID(id);
+        const respuesta = await traerDatosDePosteoPorID(id);
 
         if (respuesta) {
-            setNombres(respuesta.nombres);
-            setApellidos(respuesta.apellidos);
+            setTitulo(respuesta.titulo);
+            setDescripcion(respuesta.descripcion);
         } else {
-            setErrores({ error: 'Ocurrió un error inesperado. No se pudo obtener el usuario' });
+            setErrores({ error: 'Ocurrió un error inesperado. No se pudo obtener la publicación' });
             setDeshabilitarBoton(true);
         }
     }
@@ -94,14 +91,14 @@ const FormularioEditar = (props) => {
         <Form>
             <Form.Group as={Row} className="mb-3" controlId="formPlaintextEmail">
                 <Form.Label column sm="2">
-                    Nombres
+                    Título
                 </Form.Label>
                 <Col sm="10">
-                    <Form.Control type="text" onInput={cambiarNombres} defaultValue={nombres} />
+                    <Form.Control type="text" onInput={cambiarTitulo} defaultValue={titulo} />
                     {
-                        errores.nombres && (
+                        errores.titulo && (
                             <span style={{ color: 'red' }}>
-                                {errores.nombres}
+                                {errores.titulo}
                             </span>
                         )
                     }
@@ -110,14 +107,14 @@ const FormularioEditar = (props) => {
 
             <Form.Group as={Row} className="mb-3" controlId="formPlaintextPassword">
                 <Form.Label column sm="2">
-                    Apellidos
+                    Descripción
                 </Form.Label>
                 <Col sm="10">
-                    <Form.Control type="text" onInput={cambiarApellidos} defaultValue={apellidos} />
+                    <Form.Control type="text" onInput={cambiarDescripcion} defaultValue={descripcion} />
                     {
-                        errores.apellidos && (
+                        errores.descripcion && (
                             <span style={{ color: 'red' }}>
-                                {errores.apellidos}
+                                {errores.descripcion}
                             </span>
                         )
                     }
@@ -133,7 +130,7 @@ const FormularioEditar = (props) => {
             }
 
             <Button variant="primary" onClick={verificarDatos} disabled={deshabilitarBoton}>
-                Editar Datos
+                Editar Publicación
             </Button>
         </Form>
     );

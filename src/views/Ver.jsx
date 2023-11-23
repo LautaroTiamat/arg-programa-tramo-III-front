@@ -2,22 +2,22 @@ import { useState, useEffect } from 'react';
 import { Card, Button } from 'react-bootstrap';
 import { useParams } from "react-router-dom";
 
-import { traerDatosDeUsuarioPorID } from './../utils/llamados.js';
+import { traerDatosDePosteoPorID } from './../utils/llamados.js';
 
 const Ver = () => {
     const { id } = useParams();
 
-    const [nombres, setNombres] = useState('');
-    const [apellidos, setApellidos] = useState('');
+    const [titulo, setTitulo] = useState('');
+    const [descripcion, setDescripcion] = useState('');
 
     const traerDatos = async () => {
-        const respuesta = await traerDatosDeUsuarioPorID(id);
+        const respuesta = await traerDatosDePosteoPorID(id);
 
         if (respuesta) {
-            setNombres(respuesta.nombres);
-            setApellidos(respuesta.apellidos);
+            setTitulo(respuesta.titulo);
+            setDescripcion(respuesta.descripcion);
         } else {
-            console.log('No se encontró un usuario con el id ' + id);
+            console.log('No se encontró una publicación con el id ' + id);
         }
     }
 
@@ -29,9 +29,9 @@ const Ver = () => {
         <Card.Body>
             <Card>
                 <Card.Body>
-                    <Card.Title>{ nombres } { apellidos }</Card.Title>
+                    <Card.Title>{ titulo }</Card.Title>
                     <Card.Text>
-                        Este usuario tiene el id { id }
+                        { descripcion }
                     </Card.Text>
                     <Button variant="primary">
                         Editar
