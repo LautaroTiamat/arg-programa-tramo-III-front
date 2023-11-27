@@ -11,7 +11,7 @@ import { useNavigate } from "react-router-dom";
 import { traerDatosDePosteoPorID } from './../utils/llamados.js';
 
 const FormularioEditar = (props) => {
-    const { id } = props;
+    const { id, usuario, token } = props;
     const url = 'http://localhost:3000/publicacion';
 
     const [titulo, setTitulo] = useState('');
@@ -56,8 +56,12 @@ const FormularioEditar = (props) => {
             descripcion: descripcion,
         }
 
+        const headers = {
+            token: token
+        }
+
         try {
-            const respuesta = await axios.put(url, datos);
+            const respuesta = await axios.put(url, datos, { headers: headers });
 
             if (respuesta.status === 200) {
                 return navigate('/');
@@ -72,14 +76,22 @@ const FormularioEditar = (props) => {
     }
 
     const traerDatos = async () => {
-        const respuesta = await traerDatosDePosteoPorID(id);
+        if (usuario) {
+            const respuesta = await traerDatosDePosteoPorID(id);
 
-        if (respuesta) {
-            setTitulo(respuesta.titulo);
-            setDescripcion(respuesta.descripcion);
+            if (respuesta) {
+                if (usuario.id !== respuesta.autor) {
+                    return navigate('/');
+                }
+
+                setTitulo(respuesta.titulo);
+                setDescripcion(respuesta.descripcion);
+            } else {
+                setErrores({ error: 'Ocurrió un error inesperado. No se pudo obtener la publicación' });
+                setDeshabilitarBoton(true);
+            }
         } else {
-            setErrores({ error: 'Ocurrió un error inesperado. No se pudo obtener la publicación' });
-            setDeshabilitarBoton(true);
+            return navigate('/');
         }
     }
 

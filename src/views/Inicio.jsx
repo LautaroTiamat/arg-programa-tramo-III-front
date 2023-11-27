@@ -31,7 +31,7 @@ const Inicio = () => {
   return (
     <Card.Body>
       { usuario ? ('Bienvenid@ ' + usuario.nombres) : 'No se inició sesión' }
-      <TablaDeDatos lista={lista} />
+      <TablaDeDatos lista={lista} usuario={usuario} />
     </Card.Body>
   )
 }
